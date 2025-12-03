@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SOBRE MÍ</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#4d045c;
+    --text:#3a3a3a;
+    --muted:#777;
+    --divider:#e9e9ef;
+    --shadow: 0 30px 60px rgba(0,0,0,.15);
+    /* imagen lateral más delgada */
+    --side: min(40vw, 520px);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    color:var(--text);
+    background: var(--bg);
+  }
+
+  .topbar{
+    position: sticky; top:0; z-index:50;
+    height: 56px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 0 18px;
+    border-bottom:1px solid var(--divider);
+    background: rgba(255,255,255,.86);
+    backdrop-filter: blur(6px) saturate(120%);
+  }
+  .close{
+    display:inline-flex; align-items:center; gap:10px;
+    font-weight:800; letter-spacing:.2em; text-transform:capitalize;
+    color:var(--ink); cursor:pointer; border:none; background:none;
+  }
+  .close .x{font-size:24px; line-height:0; transform: translateY(-1px)}
+  .hkdi{ height:25px; object-fit:contain; }
+
+  .shell{
+    display:grid;
+    grid-template-columns: var(--side) 1fr;
+    min-height: calc(100vh - 56px);
+  }
+  .left{
+    position: sticky;
+    top:56px;
+    height: calc(100vh - 56px);
+    border-right:1px solid var(--divider);
+    background: #f4f4f6 center/cover no-repeat;
+    transition: background-image .6s ease-in-out, opacity .4s ease;
+    box-shadow: inset 0 0 60px rgba(0,0,0,.08);
+  }
+  .right{
+    padding: clamp(18px, 4vw, 40px);
+    transition: opacity .4s ease;
+  }
+
+  .diamonds { display: none !important; }
+
+  .meta{
+    display:flex; align-items:center; justify-content:flex-end;
+    color:#b8b2cf; font-weight:800; margin-bottom:1em;
+  }
+  .meta b{
+    color:var(--ink);
+    font-size: clamp(22px, 3vw, 34px);
+    padding-right:6px;
+  }
+
+  .content{
+    max-width: 820px; margin: 0 auto; line-height:1.8; color:#444;
+  }
+  .content p{ margin: 0 0 1.1em 0 }
+  .content img{
+    width:100%; height:auto; border-radius:12px; margin: 16px 0 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  }
+
+  /* --- Hover mágico violeta (links / close) --- */
+  .navlink,.close{
+    position: relative;
+    color: #4d045c;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color .4s ease, text-shadow .4s ease, transform .4s ease;
+    cursor: pointer;
+  }
+  .navlink:hover,.close:hover{
+    color:#a330bd;
+    text-shadow:0 0 8px #4d045c,0 0 16px #a330bd;
+    transform:scale(1.08);
+  }
+  .navlink::after,.close::after{
+    content:""; position:absolute; bottom:0; left:50%;
+    width:0%; height:2px; background:linear-gradient(90deg,transparent,#4d045c,transparent);
+    transition:all .4s ease; transform:translateX(-50%);
+  }
+  .navlink:hover::after,.close:hover::after{ width:80%; }
+
+  /* ===== TÍTULO / SUBTÍTULO BRILLO ===== */
+  h1.title,h2.subtitle{
+    position:relative;
+    color:var(--ink);
+    text-shadow:0 0 6px #4d045c55, 0 0 12px #a330bd66;
+    transition:text-shadow .5s ease, color .4s ease;
+  }
+  h1.title{
+    font-size: clamp(26px, 4vw, 44px);
+    font-weight:900;
+    margin: 0 0 0.2em 0;
+    text-align:center;
+  }
+  h2.subtitle{
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight:800;
+    text-align:center;
+    margin-bottom: 1.5em;
+  }
+  .title::before,.subtitle::before{
+    content:""; position:absolute; left:50%; top:50%;
+    width:120%; height:80%; transform:translate(-50%,-50%);
+    pointer-events:none; border-radius:999px;
+    background:radial-gradient(ellipse at center, rgba(163,48,189,.18), rgba(77,4,92,.08) 55%, transparent 75%);
+    filter:blur(22px); opacity:.28; animation:halo 8s ease-in-out infinite;
+  }
+  .title::after,.subtitle::after{
+    content:""; position:absolute; left:50%; bottom:-10px;
+    width:56%; height:2px; transform:translateX(-50%); border-radius:2px;
+    background:linear-gradient(90deg,transparent,#a330bd,transparent);
+    opacity:.6; box-shadow:0 0 10px rgba(163,48,189,.35),0 0 16px rgba(77,4,92,.25);
+    animation:lineGlow 9s ease-in-out infinite;
+  }
+  .title:hover,.subtitle:hover{ text-shadow:0 0 10px #4d045caa, 0 0 20px #a330bdaa; }
+  .title:hover::before,.subtitle:hover::before{ opacity:.4; filter:blur(26px); }
+  .title:hover::after,.subtitle:hover::after{
+    opacity:.85; box-shadow:0 0 14px rgba(163,48,189,.45),0 0 24px rgba(77,4,92,.3);
+  }
+  .subtitle{ text-shadow:0 0 4px #4d045c44, 0 0 10px #a330bd55; }
+  .subtitle::before{ opacity:.2; animation-duration:10s; }
+  .subtitle::after{  opacity:.45; animation-duration:11s; }
+
+  @keyframes halo{
+    0%,100%{ opacity:.25; filter:blur(20px); }
+    50%    { opacity:.38; filter:blur(26px); }
+  }
+  @keyframes lineGlow{
+    0%,100%{ opacity:.6; box-shadow:0 0 8px rgba(163,48,189,.35),0 0 16px rgba(77,4,92,.25); }
+    50%    { opacity:.9; box-shadow:0 0 14px rgba(163,48,189,.5),0 0 24px rgba(77,4,92,.35); }
+  }
+
+  /* Talismán / estrella */
+  .title-row,.subtitle-row{
+    position:relative; width:fit-content; margin:0 auto;
+  }
+  .talisman,.star-under{
+    position:absolute; pointer-events:none;
+    filter: drop-shadow(0 0 10px rgba(160,124,255,.35)) drop-shadow(0 0 18px rgba(110,168,255,.25));
+  }
+  .talisman{
+    width:clamp(26px,2.6vw,44px);
+    animation: drift 12s ease-in-out infinite, shimmer 10s ease-in-out infinite;
+  }
+  .star-under{
+    width: clamp(30px, 3vw, 46px);
+    bottom: clamp(-70px, -6vw, -50px);
+    left: 45%;
+    transform: translateX(-50%);
+    opacity: 0.95;
+    filter:
+      drop-shadow(0 0 14px rgba(176,82,196,.55))
+      drop-shadow(0 0 26px rgba(176,82,196,.45))
+      drop-shadow(0 0 40px rgba(255,190,255,.25));
+    animation: glowPulse 8s ease-in-out infinite, drift 14s ease-in-out infinite;
+  }
+  @keyframes glowPulse{
+    0%,100%{
+      filter:
+        drop-shadow(0 0 10px rgba(176,82,196,.45))
+        drop-shadow(0 0 22px rgba(176,82,196,.35))
+        drop-shadow(0 0 30px rgba(52, 2, 52, 0.2));
+      opacity: 0.9;
+    }
+    50%{
+      filter:
+        drop-shadow(0 0 22px rgba(176,82,196,.7))
+        drop-shadow(0 0 36px rgba(255,190,255,.55))
+        drop-shadow(0 0 48px rgba(255,220,255,.4));
+      opacity: 1;
+    }
+  }
+  .tal-title-left{ left: clamp(-60px, -5vw, -40px);  top: clamp(-6px, -0.5vw, -4px); }
+  .tal-sub-right{  right: clamp(-60px, -5vw, -40px); bottom: clamp(-24px, -2.5vw, -16px); }
+
+  @keyframes drift{
+    0%,100%{ transform:translate(var(--tx,0),var(--ty,-6px)) rotate(0deg); opacity:.92; }
+    50%    { transform:translate(var(--tx,0),var(--ty,6px)) rotate(6deg);  opacity:1; }
+  }
+  @keyframes shimmer{
+    0%,100%{ filter: drop-shadow(0 0 8px rgba(160,124,255,.35)) drop-shadow(0 0 16px rgba(110,168,255,.25)); }
+    50%    { filter: drop-shadow(0 0 12px rgba(160,124,255,.50)) drop-shadow(0 0 24px rgba(110,168,255,.34)); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .title::before,.subtitle::before,.title::after,.subtitle::after,
+    .talisman,.star-under{ animation:none }
+  }
+
+  @media (max-width:900px){
+    .shell{ grid-template-columns:1fr; }
+    .left{
+      position:relative; top:0; height:60vh;
+      border-right:none; border-bottom:1px solid var(--divider);
+      background-position:50% 30%;
+    }
+    .meta{ justify-content:center; margin:4px 0 12px; }
+  }
+
+  /* ===== BLOQUES SOBRE MÍ ===== */
+  .about-block{ margin-bottom: 2.2rem; }
+  .about-block p{
+    font-size: 0.98rem;
+    color: var(--text);
+  }
+
+  .section-label{
+    font-size: 0.78rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 800;
+    margin-bottom: .4rem;
+  }
+
+  .sec-title{
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 .9rem;
+  }
+
+  .about-grid{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 1.8rem;
+    margin-bottom: 2.4rem;
+  }
+
+  /* Tarjetas tipo botón "Abrir capítulo" */
+  .about-col{
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem;
+    border:1px solid rgba(189,166,255,.65);
+    background:linear-gradient(135deg,#f9f7ff,#f1ecff);
+    box-shadow: 0 12px 30px rgba(0,0,0,.08);
+    transition: transform .25s ease, box-shadow .25s ease,
+               border-color .25s ease, background .25s ease;
+  }
+  .about-col:hover{
+    transform:translateY(-3px);
+    border-color:#a330bd;
+    background:linear-gradient(135deg,#ffffff,#f5edff);
+    box-shadow:0 18px 45px rgba(0,0,0,.18);
+  }
+
+  .edu-item{ margin-bottom: .9rem; }
+  .edu-title{
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 0.95rem;
+  }
+  .edu-place{
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* Skills chips */
+  .skill-chips{
+    list-style:none;
+    padding:0;
+    margin:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:.55rem;
+  }
+  .chip-skill{
+    padding:.35rem .75rem;
+    border-radius:999px;
+    border:1px solid rgba(189,166,255,.7);
+    background:linear-gradient(135deg,#f9f7ff,#f1ecff);
+    font-size:.8rem;
+    font-weight:600;
+    color:#4b3a84;
+    box-shadow:0 4px 12px rgba(43,35,80,.12);
+    white-space:nowrap;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease;
+  }
+  .chip-skill:hover{
+    transform:translateY(-2px);
+    border-color:#a330bd;
+    background:linear-gradient(135deg,#ffffff,#f5edff);
+    box-shadow:0 10px 22px rgba(0,0,0,.18);
+  }
+
+  /* Software skills */
+  .soft-section{ margin-bottom:2.4rem; }
+  .soft-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap:1rem;
+  }
+  .soft-item{
+    display:flex;
+    align-items:center;
+    gap:.8rem;
+    padding:.8rem .9rem;
+    border-radius:14px;
+    border:1px solid rgba(189,166,255,.65);
+    background:linear-gradient(135deg,#f9f8ff,#f1ecff);
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    transition: transform .25s ease, box-shadow .25s ease,
+               border-color .25s ease, background .25s ease;
+  }
+  .soft-item:hover{
+    transform:translateY(-3px);
+    border-color:#a330bd;
+    background:linear-gradient(135deg,#ffffff,#f5edff);
+    box-shadow:0 18px 45px rgba(0,0,0,.18);
+  }
+
+.soft-icon{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+}
+
+.soft-icon img{
+  width:115%;
+  height:115%;
+  object-fit:cover;
+  clip-path: circle(50% at 50% 50%);
+  display:block;
+
+  transform: translateY(4%);  /* 👈 Baja la imagen un poquito */
+}
+
+/* Glow suave al rededor del icono */
+.soft-icon{
+  box-shadow:
+    0 0 8px rgba(163,48,189,0.25),
+    0 0 16px rgba(110,168,255,0.20);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.soft-item:hover .soft-icon{
+  transform: scale(1.06);
+  box-shadow:
+    0 0 12px rgba(163,48,189,0.45),
+    0 0 24px rgba(110,168,255,0.40);
+}
+
+
+
+
+
+  .soft-info{ flex:1; }
+  .soft-label{
+    font-size:.86rem;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:.25rem;
+  }
+  .soft-bar{
+    position:relative;
+    width:100%;
+    height:7px;
+    border-radius:999px;
+    background:#dfdbff;
+    overflow:hidden;
+    margin-bottom:.15rem;
+  }
+  .soft-fill{
+    position:absolute;
+    left:0; top:0; bottom:0;
+    width:0;
+    border-radius:inherit;
+    background:linear-gradient(90deg,#a330bd,#4d045c,#a330bd);
+    background-size:200% 100%;
+    /* más lenta: crece en 2.4s y luego shimmer infinito */
+    animation:
+      barGrow 2.4s cubic-bezier(.22,.61,.36,1) forwards,
+      barFlow 2.4s linear infinite 2.4s;
+  }
+  .soft-level{
+    font-size:.75rem;
+    font-weight:600;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.12em;
+  }
+
+  .nivel-basico{      --w:35%; }
+  .nivel-intermedio{  --w:65%; }
+  .nivel-avanzado{    --w:90%; }
+
+  @keyframes barGrow{
+    0%{ width:0; }
+    100%{ width:var(--w); }
+  }
+  @keyframes barFlow{
+    0%{ background-position:0 0; }
+    100%{ background-position:-150% 0; }
+  }
+
+  /* Idiomas – ahora con hover tipo tarjeta */
+  .lang-section{ margin-bottom:2rem; }
+  .lang-list{
+    display:flex;
+    flex-direction:column;
+    gap:.5rem;
+  }
+  .lang-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:.9rem;
+    padding:.55rem .8rem;
+    border-radius:12px;
+    background:linear-gradient(135deg,#f9f7ff,#f1ecff);
+    border:1px solid rgba(189,166,255,.7);
+    box-shadow:0 6px 18px rgba(0,0,0,.06);
+    transition: transform .22s ease, box-shadow .22s ease,
+               border-color .22s ease, background .22s ease;
+  }
+  .lang-row:hover{
+    transform:translateY(-2px);
+    border-color:#a330bd;
+    background:linear-gradient(135deg,#ffffff,#f5edff);
+    box-shadow:0 12px 26px rgba(0,0,0,.16);
+  }
+  .lang-name{
+    font-weight:600;
+    color:var(--ink);
+  }
+  .lang-level{
+    font-size:.8rem;
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    color:var(--muted);
+    font-weight:700;
+  }
+
+  @media (max-width:900px){
+    .about-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="close" id="btnClose">
+    <span class="x">×</span> <span>Close</span>
+  </button>
+  <img src="img/logo.png" alt="logo" class="hkdi">
+</header>
+
+<main class="shell">
+  <aside class="left" id="slideImage"></aside>
+  <section class="right" id="slideContent"><!-- dinámico --></section>
+</main>
+
+<script>
+  const slides = [
+    {
+      img: "img/MI2.jpg",
+      title: "SOBRE MI",
+      subtitle: "DISEÑADORA GRÁFICA WEB MULTIMEDIA",
+      text: `
+        <!-- DESCRIPCIÓN PERSONAL -->
+        <section class="about-block">
+          <div class="section-label">perfil</div>
+        <h3 class="sec-title">¡Bienvenid@! Soy Ivania Cerén, te cuento un poco sobre mi...</h3>
+          <p>
+            Soy la cara tras VANYA, Diseñadora Gráfica con una gran pasión por dar vida a las ideas. 
+            Disfruto escuchar lo que mis clientes imaginan y transformar esos conceptos en algo visual, claro y con intención. 
+            Creo en el diseño que conecta: el que tiene esencia, propósito y una estética capaz de sentirse y tomar presencia real.<br><br>
+            Me gusta crear marcas con identidad, desarrollar propuestas que transmiten su propósito y renovar proyectos que buscan recuperar su fuerza visual.<br><br>
+            Trabajo con una mirada fresca, creativa y detallista. Mi objetivo es que cada proyecto cuente algo, que se sienta propio y tenga la fuerza suficiente para conectar. 
+            Creo en el diseño que se siente, no solo el que se ve.
+          </p>
+        </section>
+
+        <!-- EDUCACIÓN + SKILLS GENERALES -->
+        <section class="about-grid">
+          <!-- Educación -->
+          <div class="about-col">
+            <div class="section-label">educación</div>
+            <h3 class="sec-title">Formación académica</h3>
+
+            <div class="edu-item">
+              <div class="edu-title">Licenciatura en Diseño Gráfico Web Multimedia</div>
+              <div class="edu-place">Universidad Francisco Gavidia · En curso</div>
+            </div>
+
+            <div class="edu-item">
+              <div class="edu-title">Bachillerato General</div>
+              <div class="edu-place">Instituto Técnico Ricaldone · 2018 - 2020</div>
+            </div>
+
+          </div>
+
+          <!-- Skills generales -->
+          <div class="about-col">
+            <div class="section-label">skills</div>
+            <h3 class="sec-title">Fortalezas creativas</h3>
+            <ul class="skill-chips">
+              <li class="chip-skill">Branding & construcción de marca</li>
+              <li class="chip-skill">Dirección de arte para redes</li>
+              <li class="chip-skill">Edición multimedia / Contenido visual</li>
+              <li class="chip-skill">Fotografía & composición</li>
+              <li class="chip-skill">Ilustración Vectorial</li>
+              <li class="chip-skill">Storytelling visual</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- SOFTWARE SKILLS (ajustados) -->
+        <section class="soft-section">
+          <div class="section-label">software</div>
+          <h3 class="sec-title">Manejo de programas</h3>
+
+          <div class="soft-grid">
+            <!-- Adobe Illustrator: Avanzado -->
+            <div class="soft-item">
+              <div class="soft-icon">
+                <img src="img/AI.png" alt="Adobe Illustrator">
+              </div>
+              <div class="soft-info">
+                <div class="soft-label">Adobe Illustrator</div>
+                <div class="soft-bar">
+                  <span class="soft-fill nivel-avanzado"></span>
+                </div>
+                <span class="soft-level">Avanzado</span>
+              </div>
+            </div>
+
+            <!-- Adobe Photoshop: Intermedio -->
+            <div class="soft-item">
+              <div class="soft-icon">
+                <img src="img/PS.png" alt="Adobe Photoshop">
+              </div>
+              <div class="soft-info">
+                <div class="soft-label">Adobe Photoshop</div>
+                <div class="soft-bar">
+                  <span class="soft-fill nivel-intermedio"></span>
+                </div>
+                <span class="soft-level">Intermedio</span>
+              </div>
+            </div>
+
+            <!-- Adobe Premiere Pro: Básico -->
+            <div class="soft-item">
+              <div class="soft-icon">
+                <img src="img/PR.png" alt="Adobe Premiere Pro">
+              </div>
+              <div class="soft-info">
+                <div class="soft-label">Adobe Premiere Pro</div>
+                <div class="soft-bar">
+                  <span class="soft-fill nivel-basico"></span>
+                </div>
+                <span class="soft-level">Básico</span>
+              </div>
+            </div>
+
+            <!-- Adobe Audition: Básico -->
+            <div class="soft-item">
+              <div class="soft-icon">
+                <img src="img/AU.png" alt="Adobe Audition">
+              </div>
+              <div class="soft-info">
+                <div class="soft-label">Adobe Audition</div>
+                <div class="soft-bar">
+                  <span class="soft-fill nivel-basico"></span>
+                </div>
+                <span class="soft-level">Básico</span>
+              </div>
+            </div>
+
+            <!-- Visual Studio Code: Intermedio -->
+            <div class="soft-item">
+              <div class="soft-icon">
+                <img src="img/VC.png" alt="Visual Studio Code">
+              </div>
+              <div class="soft-info">
+                <div class="soft-label">Visual Studio Code</div>
+                <div class="soft-bar">
+                  <span class="soft-fill nivel-intermedio"></span>
+                </div>
+                <span class="soft-level">Intermedio</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- IDIOMAS -->
+        <section class="lang-section">
+          <div class="section-label">idiomas</div>
+          <h3 class="sec-title">Comunicación</h3>
+          <div class="lang-list">
+            <div class="lang-row">
+              <span class="lang-name">Español</span>
+              <span class="lang-level">Nativo</span>
+            </div>
+            <div class="lang-row">
+              <span class="lang-name">Inglés</span>
+              <span class="lang-level">Intermedio</span>
+            </div>
+          </div>
+        </section>
+      `
+    }
+  ];
+
+  let current = 0;
+  const left = document.getElementById('slideImage');
+  const content = document.getElementById('slideContent');
+
+  function renderSlide(index){
+    const s = slides[index];
+    left.style.backgroundImage = `url('${s.img}')`;
+
+    content.style.opacity = 0;
+    setTimeout(() => {
+      content.innerHTML = `
+        <div class="title-row">
+          <h1 class="title" tabindex="0">${s.title}</h1>
+          <svg class="talisman tal-title-left" viewBox="0 0 64 96" aria-hidden="true">
+            <defs>
+              <linearGradient id="gVio-${index}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"  stop-color="#6ea8ff"/>
+                <stop offset="100%" stop-color="#a07cff"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 2 L62 32 L32 62 L2 32 Z" fill="url(#gVio-${index})"/>
+            <path d="M32 14 L50 32 L32 50 L14 32 Z" fill="#c7d3ff"/>
+            <circle cx="32" cy="32" r="3.2" fill="#eef6ff"/>
+            <path d="M32 66 L40 74 L32 82 L24 74 Z" fill="#89b6ff"/>
+          </svg>
+        </div>
+
+        <div class="subtitle-row">
+          <h2 class="subtitle" tabindex="0">${s.subtitle}</h2>
+          <svg class="talisman tal-sub-right" viewBox="0 0 64 96" aria-hidden="true">
+            <defs>
+              <linearGradient id="gVio2-${index}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"  stop-color="#89b6ff"/>
+                <stop offset="100%" stop-color="#b79bff"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 2 L62 32 L32 62 L2 32 Z" fill="url(#gVio2-${index})"/>
+            <path d="M32 14 L50 32 L32 50 L14 32 Z" fill="#e0e6ff"/>
+            <circle cx="32" cy="32" r="3" fill="#ffffff"/>
+            <path d="M32 66 L38 72 L32 78 L26 72 Z" fill="#9ec4ff"/>
+          </svg>
+
+          <svg class="star-under" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <radialGradient id="starGlow" cx="50%" cy="50%" r="60%">
+                <stop offset="0%" stop-color="#d9a8ff" stop-opacity="1"/>
+                <stop offset="50%" stop-color="#b052c4" stop-opacity="1"/>
+                <stop offset="100%" stop-color="#5c1a74" stop-opacity="0.3"/>
+              </radialGradient>
+            </defs>
+            <path d="M32 6 L36 24 L58 28 L36 32 L32 50 L28 32 L6 28 L28 24 Z" fill="url(#starGlow)"/>
+          </svg>
+        </div>
+
+        
+        <article class="content">
+          ${s.text}
+        </article>
+      `;
+      content.style.opacity = 1;
+    }, 200);
+  }
+
+  renderSlide(current);
+document.getElementById('btnClose').addEventListener('click', () => {
+  // Para evitar que la landing vuelva a aparecer
+  sessionStorage.setItem('fromProject', '1');
+
+  // Regresar siempre a la página principal con las tarjetas
+  window.location.href = "index.html";
+});
+
+</script>
+</body>
+</html>

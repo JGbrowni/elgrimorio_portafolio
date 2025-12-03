@@ -1,0 +1,560 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PORTAFOLIO - IVANIA CERÉN</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+<style>
+  /* === Fuente display para el título "EL GRIMORIO" ===
+     Asegúrate de poner tus archivos aquí:
+     /fonts/Amoria-Regular.woff2  y/o  /fonts/Amoria-Regular.woff
+  */
+  @font-face{
+    font-family: "Amoria";
+    src: url("fonts/Amoria-Regular.woff2") format("woff2"),
+         url("fonts/Amoria-Regular.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root{
+    --page-bg:#0b1020;
+    --text:#e9eef6;
+    --muted:#b9c3d1;
+    --overlay: rgba(6,10,18,.38);
+    --overlay-strong: rgba(6,10,18,.65);
+    --violet:#bda6ff;
+    --ring:#ffffff;
+    --grow:1.06;
+    --img-grow:1.04;
+
+    /* Fondo de la landing (estilo Grimorio, más sobrio) */
+    --landing-bg:
+      radial-gradient(circle at 10% 0%, #3b235f 0%, transparent 45%),
+      radial-gradient(circle at 90% 0%, #49318a 0%, transparent 50%),
+      radial-gradient(circle at 50% 100%, #140822 0%, #050711 55%, #020309 100%);
+  }
+
+  /* 💡 OPCIONAL: si quieres usar una imagen de fondo, descomenta esto*/
+  :root{
+    --landing-bg:
+      url("img/MI2.jpg") center/100% no-repeat, 
+      #050711;
+      
+  }
+  
+
+  *{ box-sizing:border-box }
+  html,body{ height:100% }
+  body{
+    margin:0; 
+    font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+    color:var(--text); 
+    background:var(--page-bg); 
+    overflow-x:hidden;
+  }
+
+  /* ============== LANDING "EL GRIMORIO" ============== */
+
+  .landing{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background: var(--landing-bg);
+    overflow:hidden;
+
+    /* animación más ligera, solo opacity + scale */
+    opacity:1;
+    transform:scale(1);
+    transition:
+      opacity 2s ease,
+      transform 2s ease;
+    will-change: opacity, transform;
+  }
+
+  .landing.hide{
+    opacity:0;
+    transform:scale(1.5);
+  }
+
+  .landing-inner{
+    position:relative;
+    text-align:center;
+    max-width:640px;
+  }
+
+  .landing-title{
+    margin:0;
+    font-size:clamp(44px, 6.5vw, 100px);
+    font-weight:900;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#f7f1ff;
+    /* 👇 aquí le aplicamos Amoria como primera opción */
+    font-family: "Amoria", "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    text-shadow:
+      0 0 10px rgba(189,166,255,.9),
+      0 0 22px rgba(132,101,255,.8),
+      0 0 40px rgba(81,43,157,.9),
+      0 0 70px rgba(20,8,50,1);
+    animation:
+      floatTitle 4s ease-in-out infinite,
+      shimmerTitle 5s ease-in-out infinite;
+  }
+
+  @keyframes floatTitle{
+    0%,100%{ transform:translateY(0); }
+    50%    { transform:translateY(-10px); }
+  }
+  @keyframes shimmerTitle{
+    0%,100%{
+      text-shadow:
+        0 0 8px rgba(189,166,255,.7),
+        0 0 18px rgba(132,101,255,.6),
+        0 0 32px rgba(44,16,94,.8);
+    }
+    50%{
+      text-shadow:
+        0 0 14px rgba(222,206,255,1),
+        0 0 30px rgba(165,132,255,1),
+        0 0 55px rgba(115,80,212,1);
+    }
+  }
+
+  .landing-sub{
+    margin:18px auto 26px;
+    max-width:380px;
+    font-size:.9rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    opacity:.9;
+  }
+
+  .landing-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:12px 24px;
+    border-radius:999px;
+    border:2px solid rgba(255,255,255,.9);
+    background:linear-gradient(135deg, rgba(189,166,255,.16), rgba(132,101,255,.05));
+    color:#fff;
+    font-weight:800;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-size:.8rem;
+    cursor:pointer;
+    box-shadow:0 12px 30px rgba(0,0,0,.55);
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+  }
+  .landing-btn span{ font-size:1.1rem; }
+  .landing-btn:hover{
+    transform:translateY(-2px) scale(1.04);
+    border-color:var(--violet);
+    background:linear-gradient(135deg, rgba(189,166,255,.35), rgba(132,101,255,.16));
+    box-shadow:0 18px 45px rgba(0,0,0,.75);
+  }
+
+  /* TALISMANES alrededor del título */
+  .landing-talisman{
+    position:absolute;
+    width: clamp(32px, 4vw, 52px);
+    filter:
+      drop-shadow(0 0 10px rgba(160,124,255,.5))
+      drop-shadow(0 0 20px rgba(110,168,255,.45));
+    pointer-events:none;
+    animation: drift 14s ease-in-out infinite, shimmer 11s ease-in-out infinite;
+  }
+  .landing-tal-1{ top:-40px; left:8%; }
+  .landing-tal-2{ top:-55px; right:6%; --tx:4px; }
+  .landing-tal-3{ bottom:-45px; left:18%; --tx:-4px; }
+  .landing-tal-4{ bottom:-50px; right:14%; }
+
+  @keyframes drift{
+    0%,100%{ transform:translate(var(--tx,0),-4px); opacity:.95; }
+    50%    { transform:translate(var(--tx,0),6px);  opacity:1; }
+  }
+  @keyframes shimmer{
+    0%,100%{
+      filter:
+        drop-shadow(0 0 8px rgba(160,124,255,.4))
+        drop-shadow(0 0 16px rgba(110,168,255,.3));
+    }
+    50%{
+      filter:
+        drop-shadow(0 0 14px rgba(212,191,255,.9))
+        drop-shadow(0 0 26px rgba(145,181,255,.7));
+    }
+  }
+
+  /* ===== Acciones superiores (Sobre mí + Compartir) ===== */
+  .top-actions{
+    position:fixed; top:14px; right:14px; z-index:10;
+    display:flex; align-items:center; gap:10px;
+  }
+  .icon-btn{
+    width:40px; height:40px; border-radius:999px; display:grid; place-items:center;
+    background: rgba(255,255,255,.06);
+    border:2px solid rgba(255,255,255,.9);
+    color:#fff; cursor:pointer; backdrop-filter: blur(4px);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .icon-btn:hover{ transform:translateY(-1px); box-shadow:0 8px 24px rgba(0,0,0,.28); border-color:var(--violet) }
+  .icon-btn svg{ width:20px; height:20px; }
+
+  /* Menú de redes */
+  .share-wrap{ position:relative }
+  .share-menu{
+    position:absolute; top:50px; right:0; padding:12px 14px; border-radius:16px;
+    background: rgba(20,22,40,.9); border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 20px 50px rgba(0,0,0,.45); backdrop-filter: blur(10px);
+    display:grid; gap:12px; grid-auto-flow:column; align-items:center;
+    transform-origin: top right;
+    transform: scale(.92); opacity:0; pointer-events:none;
+    transition: transform .26s cubic-bezier(.22,.61,.36,1), opacity .22s ease;
+  }
+  .share-menu.open{ transform: scale(1); opacity:1; pointer-events:auto; }
+  .share-title{ font-weight:900; letter-spacing:.22em; font-size:12px; color:#fff; opacity:.9; margin-left:8px }
+  .social{
+    display:flex; gap:10px; align-items:center;
+    padding-left:8px; border-left:1px solid rgba(255,255,255,.12);
+  }
+  .chip{
+    width:40px; height:40px; border-radius:999px; display:grid; place-items:center;
+    border:2px solid #fff; color:#fff; text-decoration:none; font-weight:900;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .chip:hover{ transform:translateY(-1px); box-shadow:0 8px 20px rgba(0,0,0,.3); border-color:var(--violet) }
+  .chip svg{ width:18px; height:18px }
+
+  .copy-msg{
+    position:absolute; top:-28px; right:0; background:#1f2342; color:#fff; padding:4px 8px;
+    border-radius:8px; font-size:12px; opacity:0; transform: translateY(4px);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .copy-msg.show{ opacity:1; transform: translateY(0) }
+
+  /* ===== Tarjetas ===== */
+  .panels{ position:relative; display:flex; height:100vh; isolation:isolate; }
+  .slot{ flex:1 1 0; min-width:0; position:relative; }
+  a.card{
+    position:absolute; inset:0; display:block; color:inherit; text-decoration:none; cursor:pointer;
+    transform:translateZ(0) scale(1); transform-origin:center;
+    transition: transform .55s cubic-bezier(.22,.61,.36,1),
+                filter .45s ease, box-shadow .45s ease, opacity .35s ease;
+  }
+  a.card::before{
+    content:""; position:absolute; inset:0; z-index:0;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--overlay) 58%, var(--overlay-strong) 100%),
+      var(--bg-layer, transparent);
+    background-size:cover; background-position:center;
+    transform: scale(1);
+    transition: transform .55s cubic-bezier(.22,.61,.36,1), filter .45s ease, opacity .35s ease;
+    filter: contrast(1.02) saturate(1.02);
+  }
+  .center{
+    position:absolute; inset:0; z-index:2; display:grid; place-items:center; text-align:center;
+    padding: clamp(16px, 4vw, 40px);
+    opacity:0; transform: translateY(8px);
+    transition: opacity .32s ease, transform .55s cubic-bezier(.22,.61,.36,1);
+  }
+  .center h2{ margin:0 0 .5rem; font-weight:900; letter-spacing:.02em; font-size: clamp(22px, 3.5vw, 38px); color:#dfe7f2; }
+  .center p{ margin:0 auto; max-width:min(48ch, 70%); line-height:1.6; color:var(--muted); font-weight:500; font-size: clamp(14px, 1.6vw, 18px); }
+  .footer{
+    position:absolute; left:0; right:0; bottom:26px; z-index:2;
+    display:flex; justify-content:center; gap:12px; text-transform:uppercase; letter-spacing:.18em;
+    font-weight:800; font-size:clamp(11px,1.3vw,14px);
+  }
+  .dotnum{
+    width:34px; height:34px; border-radius:999px; display:grid; place-items:center;
+    border:2px solid #fff; color:#fff; font-weight:900; font-size:14px;
+    box-shadow: 0 0 0 2px rgba(255,255,255,.15) inset;
+  }
+  .panels:hover a.card{ filter: brightness(.94); }
+  .slot:hover a.card{ transform: translateZ(0) scale(var(--grow)); filter:none; box-shadow: 0 28px 60px rgba(0,0,0,.42); }
+  .slot:hover a.card::before{ transform: scale(var(--img-grow)); }
+  .slot:hover .center{ opacity:1; transform: translateY(0); }
+
+  .slot:focus-within a.card, .slot:focus-visible a.card{
+    outline:3px solid #fff8; outline-offset:-3px; transform:scale(var(--grow)); box-shadow:0 28px 60px rgba(0,0,0,.42);
+  }
+  .slot:focus-within .center{ opacity:1; transform:translateY(0); }
+
+  @media (max-width: 880px){
+    .panels{ flex-direction:column; height:auto; min-height:100vh }
+    .slot{ height:60vh }
+    .panels:hover a.card{ filter:none }
+    .share-menu{ right:50%; transform:translateX(50%) scale(.92); }
+    .share-menu.open{ transform:translateX(50%) scale(1) }
+  }
+
+  /* Fondos de las tarjetas */
+  :root{
+    --bg-url-1: url(img/fenix2.png);
+    --bg-url-2: url(img/mariposa2.png);
+    --bg-url-3: url(img/lince2.png);
+    --bg-url-4: url(img/dragon.png);
+  }
+  .p1 a.card::before{ background-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--overlay) 58%, var(--overlay-strong) 100%), var(--bg-url-1); }
+  .p2 a.card::before{ background-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--overlay) 58%, var(--overlay-strong) 100%), var(--bg-url-2); }
+  .p3 a.card::before{ background-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--overlay) 58%, var(--overlay-strong) 100%), var(--bg-url-3); }
+  .p4 a.card::before{ background-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--overlay) 58%, var(--overlay-strong) 100%), var(--bg-url-4); }
+
+</style>
+</head>
+<body>
+
+<!-- LANDING EL GRIMORIO -->
+<div class="landing" id="landing">
+  <div class="landing-inner">
+    <!-- TALISMANES alrededor -->
+    <svg class="landing-talisman landing-tal-1" viewBox="0 0 64 96" aria-hidden="true">
+      <defs>
+        <linearGradient id="landingG1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#6ea8ff"/>
+          <stop offset="100%" stop-color="#a07cff"/>
+        </linearGradient>
+      </defs>
+      <path d="M32 2 L62 32 L32 62 L2 32 Z" fill="url(#landingG1)"/>
+      <path d="M32 14 L50 32 L32 50 L14 32 Z" fill="#c7d3ff"/>
+      <circle cx="32" cy="32" r="3.2" fill="#eef6ff"/>
+      <path d="M32 66 L40 74 L32 82 L24 74 Z" fill="#89b6ff"/>
+    </svg>
+
+    <svg class="landing-talisman landing-tal-2" viewBox="0 0 64 96" aria-hidden="true">
+      <defs>
+        <linearGradient id="landingG2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#89b6ff"/>
+          <stop offset="100%" stop-color="#b79bff"/>
+        </linearGradient>
+      </defs>
+      <path d="M32 2 L62 32 L32 62 L2 32 Z" fill="url(#landingG2)"/>
+      <path d="M32 14 L50 32 L32 50 L14 32 Z" fill="#e0e6ff"/>
+      <circle cx="32" cy="32" r="3" fill="#ffffff"/>
+      <path d="M32 66 L38 72 L32 78 L26 72 Z" fill="#9ec4ff"/>
+    </svg>
+
+    <svg class="landing-talisman landing-tal-3" viewBox="0 0 64 96" aria-hidden="true">
+      <defs>
+        <linearGradient id="landingG3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#6ea8ff"/>
+          <stop offset="100%" stop-color="#a07cff"/>
+        </linearGradient>
+      </defs>
+      <path d="M32 2 L62 32 L32 62 L2 32 Z" fill="url(#landingG3)"/>
+      <path d="M32 14 L50 32 L32 50 L14 32 Z" fill="#c7d3ff"/>
+      <circle cx="32" cy="32" r="3.2" fill="#eef6ff"/>
+      <path d="M32 66 L40 74 L32 82 L24 74 Z" fill="#89b6ff"/>
+    </svg>
+
+    <svg class="landing-talisman landing-tal-4" viewBox="0 0 64 96" aria-hidden="true">
+      <defs>
+        <linearGradient id="landingG4" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#89b6ff"/>
+          <stop offset="100%" stop-color="#b79bff"/>
+        </linearGradient>
+      </defs>
+      <path d="M32 2 L62 32 L32 62 L2 32 Z" fill="url(#landingG4)"/>
+      <path d="M32 14 L50 32 L32 50 L14 32 Z" fill="#e0e6ff"/>
+      <circle cx="32" cy="32" r="3" fill="#ffffff"/>
+      <path d="M32 66 L38 72 L32 78 L26 72 Z" fill="#9ec4ff"/>
+    </svg>
+
+    <h1 class="landing-title">EL GRIMORIO</h1>
+    <p class="landing-sub"> · PORTAFOLIO DIGITAL ·</p>
+
+    <button class="landing-btn" id="enterBtn">
+      ¿ENTRAMOS?
+    </button>
+  </div>
+</div>
+
+<!-- Acciones: Sobre mí + Compartir -->
+<div class="top-actions">
+  <a class="icon-btn" href="sobre-mi.html" title="Sobre mí" aria-label="Sobre mí">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M20 21a8 8 0 0 0-16 0" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  </a>
+
+  <div class="share-wrap">
+    <button class="icon-btn" id="btnShare" title="Compartir" aria-expanded="false" aria-controls="shareMenu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+        <path d="M8.59 13.51 15.42 17.49M15.41 6.51 8.59 10.49"/>
+      </svg>
+    </button>
+
+    <div class="share-menu" id="shareMenu" role="menu" aria-hidden="true">
+      <span class="share-title">CONTACTAME POR:</span>
+      <div class="social">
+
+        <!-- Tarjetas 
+        <a class="chip" id="fb"  target="_blank" aria-label="Facebook" title="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 10h3l-1 4h-2v7h-4v-7H7v-4h2V8a4 4 0 0 1 4-4h3v4h-2a1 1 0 0 0-1 1v1z"/></svg>
+        </a>
+        <a class="chip" id="wa" target="_blank" aria-label="WhatsApp" title="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2a10 10 0 0 0-8.94 14.45L2 22l5.8-1.52A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.07-1.12l-.29-.17-3.08.8.82-2.93-.2-.31A8 8 0 1 1 12 20Zm4.25-6.18c-.23-.12-1.36-.67-1.57-.74s-.36-.12-.51.12-.59.67-.72.82-.24.16-.44.06a6.73 6.73 0 0 1-2-1.24 6.29 6.29 0 0 1-1.36-1.62c-.14-.23 0-.36.1-.48l.33-.36c.08-.09.1-.18.05-.3s-.49-1.16-.67-1.59-.36-.37-.5-.38h-.43a.82.82 0 0 0-.6.27 2.59 2.59 0 0 0-.83 1.92 4.45 4.45 0 0 0 1 2.37A9.47 9.47 0 0 0 12 15.56a5.22 5.22 0 0 0 2.22-.55 2.08 2.08 0 0 0 .92-1.25c.05-.1.05-.18 0-.26a.67.67 0 0 0-.3-.18Z"/>
+          </svg>
+        </a>-->
+        <a class="chip" id="ln" target="_blank" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 6.5A1.94 1.94 0 1 1 5 4.56 1.94 1.94 0 0 1 6.94 6.5ZM5.5 8.5h2.9V20H5.5ZM10 8.5h2.8v1.6H13a3.1 3.1 0 0 1 2.8-1.6c3 0 3.5 2 3.5 4.6V20h-2.9v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V20H10Z"/></svg>
+        </a>
+        <a class="chip" id="ml" target="_blank" aria-label="Email" title="Email">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2Zm0 2v.5l-8 5-8-5V8Zm-16 8V9.8l8 5 8-5V16Z"/></svg>
+        </a>
+        <button class="chip" id="cp" aria-label="Copiar enlace" title="Copiar enlace">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="copy-msg" id="copyMsg">Copiado</div>
+    </div>
+  </div>
+</div>
+
+<!-- Tarjetas -->
+<main class="panels">
+  <section class="slot p1">
+    <a class="card" href="pagina1.html">
+      <div class="center">
+        <div>
+          <h2>SIGILOS VISUALES</h2>
+          <p>Como el fénix, las ideas resurgen de las cenizas y toman nueva forma.
+Aquí se materializa el proceso de crear y transformar identidades visuales desde su esencia</p>
+        </div>
+      </div>
+      <div class="footer"><span class="dotnum">1</span><span>BRANDING</span></div>
+    </a>
+  </section>
+
+  <section class="slot p2">
+    <a class="card" href="pagina2.html">
+      <div class="center">
+        <div>
+          <h2>POCIONES EN RED</h2>
+          <p>Ligera y en constante movimiento, la mariposa lleva los mensajes a través del aire.
+Este espacio reúne creaciones digitales pensadas para conectar marcas y audiencias en redes.</p>
+        </div>
+      </div>
+      <div class="footer"><span class="dotnum">2</span><span>REDES SOCIALES</span></div>
+    </a>
+  </section>
+
+  <section class="slot p3">
+    <a class="card" href="pagina3.html">
+      <div class="center">
+        <div>
+          <h2>OJO DE CRISTAL</h2>
+          <p>Con la mirada aguda del lince, cada detalle revela una historia.
+Un recorrido visual a través de la fotografía, donde la observación y la intuición guían cada captura.</p>
+        </div>
+      </div>
+      <div class="footer"><span class="dotnum">3</span><span>FOTOGRAFIA</span></div>
+    </a>
+  </section>
+
+  <section class="slot p4">
+    <a class="card" href="pagina4.html">
+      <div class="center">
+        <div>
+          <h2>DIMENSIONES PARALELAS</h2>
+          <p>En este capítulo, el Dragón se erige como guardián de los portales digitales.
+Su fuego alimenta la creación de experiencias inmersivas donde imagen, sonido y movimiento se entrelazan para dar vida a mundos interactivos.</p>
+        </div>
+      </div>
+      <div class="footer"><span class="dotnum">4</span><span>MULTIMEDIA</span></div>
+    </a>
+  </section>
+</main>
+
+<script>
+/* ===== Compartir: abrir/cerrar y enlaces ===== */
+(() => {
+  const btn = document.getElementById('btnShare');
+  const menu = document.getElementById('shareMenu');
+  const msg  = document.getElementById('copyMsg');
+
+  function toggle(open){
+    const isOpen = open ?? !menu.classList.contains('open');
+    menu.classList.toggle('open', isOpen);
+    btn.setAttribute('aria-expanded', isOpen);
+    menu.setAttribute('aria-hidden', !isOpen);
+  }
+  btn.addEventListener('click', (e)=>{ e.stopPropagation(); toggle(); });
+  document.addEventListener('click', (e)=> { if(!menu.contains(e.target) && e.target !== btn) toggle(false); });
+const url   = encodeURIComponent(window.location.href);
+const text  = encodeURIComponent('Mira este proyecto 👇');
+const title = encodeURIComponent(document.title);
+
+// Solo si existen, les pone href
+const fb = document.getElementById('fb');
+const wa = document.getElementById('wa');
+
+if (fb) {
+  fb.href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+}
+if (wa) {
+  wa.href = `https://api.whatsapp.com/send?text=${text}%20${url}`;
+}
+
+document.getElementById('ln').href = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+document.getElementById('ml').href = `mailto:?subject=${title}&body=${text}%0A${url}`;
+
+  document.getElementById('cp').addEventListener('click', async ()=> {
+    try{
+      await navigator.clipboard.writeText(window.location.href);
+      msg.classList.add('show');
+      setTimeout(()=> msg.classList.remove('show'), 1200);
+    }catch(err){
+      msg.textContent = 'No se pudo copiar';
+      msg.classList.add('show');
+      setTimeout(()=> { msg.classList.remove('show'); msg.textContent='Copiado'; }, 1400);
+    }
+  });
+})();
+
+/* ===== Landing: mostrar solo al entrar/refrescar, NO al volver de proyectos ===== */
+(() => {
+  const landing  = document.getElementById('landing');
+  const enterBtn = document.getElementById('enterBtn');
+  if (!landing) return;
+
+  // ¿Venimos de un proyecto?
+  const fromProject = sessionStorage.getItem('fromProject') === '1';
+
+  if (fromProject) {
+    landing.style.display = 'none';
+    sessionStorage.removeItem('fromProject');
+    return;
+  }
+
+  if (enterBtn){
+    enterBtn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      landing.classList.add('hide');
+      setTimeout(()=>{ landing.style.display = 'none'; }, 2050);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

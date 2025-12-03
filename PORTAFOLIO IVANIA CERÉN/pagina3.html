@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FOTOGRAFÍA</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink: #4d045c;
+    --text:#3a3a3a;
+    --muted:#777;
+    --divider:#e9e9ef;
+    --shadow: 0 30px 60px rgba(0,0,0,.15);
+    --side: min(48vw, 820px);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    color:var(--text);
+    background: var(--bg);
+  }
+
+  .topbar{
+    position: sticky; top:0; z-index:50;
+    height: 56px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 0 18px;
+    border-bottom:1px solid var(--divider);
+    background: rgba(255,255,255,.86);
+    backdrop-filter: blur(6px) saturate(120%);
+  }
+  .close{
+    display:inline-flex; align-items:center; gap:10px;
+    font-weight:800; letter-spacing:.2em; text-transform:capitalize;
+    color:var(--ink); cursor:pointer; border:none; background:none;
+  }
+  .close .x{font-size:24px; line-height:0; transform: translateY(-1px)}
+  .hkdi{ height:25px; object-fit:contain; }
+
+  /* ====== LAYOUT: solo contenido a todo el ancho, sin lado izquierdo ====== */
+  .shell{
+    min-height: calc(100vh - 56px);
+  }
+  .right{
+    padding: clamp(18px, 4vw, 40px);
+    transition: opacity .4s ease;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  h1.title{
+    font-size: clamp(26px, 4vw, 44px);
+    font-weight:900;
+    color:var(--ink);
+    margin: 0 0 0.2em 0;
+    text-align:center;
+  }
+  h2.subtitle{
+    font-size: clamp(20px, 2.5vw, 28px);
+    color: #4d045c;
+    font-weight:800;
+    text-align:center;
+    margin-bottom: 1.5em;
+  }
+
+  .diamonds { display: none !important; }
+
+  .meta{ display:flex; align-items:center; justify-content:flex-end; color:#b8b2cf; font-weight:800; margin-bottom:1em; }
+  .meta b{ color:var(--ink); font-size: clamp(22px, 3vw, 34px); padding-right:6px }
+
+  .content{ max-width: 820px; margin: 0 auto; line-height:1.8; color:#444; }
+  .content p{ margin: 0 0 1.1em 0 }
+  .content img{
+    width:100%; height:auto; border-radius:12px; margin: 16px 0 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  }
+  .bottom{
+    margin-top: 32px; padding-top: 16px; border-top:1px solid var(--divider);
+    display:flex; align-items:center; justify-content:space-between; color:#8a88a6;
+  }
+
+  /* --- Efecto hover mágico violeta (enlaces) --- */
+  .navlink,.close{
+    position: relative;
+    color: #4d045c;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color .4s ease, text-shadow .4s ease, transform .4s ease;
+    cursor: pointer;
+  }
+  .navlink:hover,.close:hover{
+    color:#a330bd;
+    text-shadow:0 0 8px #4d045c,0 0 16px #a330bd;
+    transform:scale(1.08);
+  }
+  .navlink::after,.close::after{
+    content:""; position:absolute; bottom:0; left:50%;
+    width:0%; height:2px; background:linear-gradient(90deg,transparent,#4d045c,transparent);
+    transition:all .4s ease; transform:translateX(-50%);
+  }
+  .navlink:hover::after,.close:hover::after{ width:80%; }
+
+  /* ===== Brillo respirante + hover (título/subtítulo) ===== */
+  .title,.subtitle{
+    position:relative;
+    color:#a330bd;
+    text-shadow:0 0 6px #4d045c88, 0 0 12px #a330bd88;
+    transition:text-shadow .5s ease, color .4s ease;
+  }
+  /* halo */
+  .title::before,.subtitle::before{
+    content:""; position:absolute; left:50%; top:50%;
+    width:120%; height:80%; transform:translate(-50%,-50%);
+    pointer-events:none; border-radius:999px;
+    background:radial-gradient(ellipse at center, rgba(163,48,189,.22), rgba(77,4,92,.10) 55%, transparent 75%);
+    filter:blur(22px); opacity:.28; animation:halo 8s ease-in-out infinite;
+  }
+  /* línea inferior */
+  .title::after,.subtitle::after{
+    content:""; position:absolute; left:50%; bottom:-10px;
+    width:56%; height:2px; transform:translateX(-50%); border-radius:2px;
+    background:linear-gradient(90deg,transparent,#a330bd,transparent);
+    opacity:.6; box-shadow:0 0 10px rgba(163,48,189,.35),0 0 16px rgba(77,4,92,.25);
+    animation:lineGlow 9s ease-in-out infinite;
+  }
+  /* hover: intensificar brillo */
+  .title:hover,.subtitle:hover{ text-shadow:0 0 10px #4d045cbb, 0 0 20px #a330bdaa; }
+  .title:hover::before,.subtitle:hover::before{ opacity:.4; filter:blur(26px); }
+  .title:hover::after,.subtitle:hover::after{
+    opacity:.85; box-shadow:0 0 14px rgba(163,48,189,.45),0 0 24px rgba(77,4,92,.3);
+  }
+  /* subtítulo un poco más suave */
+  .subtitle{ text-shadow:0 0 4px #4d045c66, 0 0 10px #a330bd66; }
+  .subtitle::before{ opacity:.2; animation-duration:10s; }
+  .subtitle::after{  opacity:.45; animation-duration:11s; }
+
+  @keyframes halo{
+    0%,100%{ opacity:.25; filter:blur(20px); }
+    50%    { opacity:.38; filter:blur(26px); }
+  }
+  @keyframes lineGlow{
+    0%,100%{ opacity:.6; box-shadow:0 0 8px rgba(163,48,189,.35),0 0 16px rgba(77,4,92,.25); }
+    50%    { opacity:.9; box-shadow:0 0 14px rgba(163,48,189,.5),0 0 24px rgba(77,4,92,.35); }
+  }
+
+  /* ===== Anclas y talismanes junto a título/subtítulo ===== */
+  .title-row,.subtitle-row{
+    position:relative; width:fit-content; margin:0 auto;
+  }
+  .talisman,.star-under{
+    position:absolute; pointer-events:none;
+    filter: drop-shadow(0 0 10px rgba(160,124,255,.35)) drop-shadow(0 0 18px rgba(110,168,255,.25));
+  }
+  .talisman{ width:clamp(26px,2.6vw,44px); animation: drift 12s ease-in-out infinite, shimmer 10s ease-in-out infinite; }
+
+  /* 🌟 Estrella resplandeciente */
+  .star-under{
+    width: clamp(30px, 3vw, 46px);
+    bottom: clamp(-70px, -6vw, -50px);
+    left: 35%;
+    transform: translateX(-50%);
+    opacity: 0.95;
+    filter:
+      drop-shadow(0 0 14px rgba(176,82,196,.55))
+      drop-shadow(0 0 26px rgba(176,82,196,.45))
+      drop-shadow(0 0 40px rgba(255,190,255,.25));
+    animation: glowPulse 8s ease-in-out infinite, drift 14s ease-in-out infinite;
+  }
+
+  /* ✨ Animación de resplandor suave */
+  @keyframes glowPulse{
+    0%,100%{
+      filter:
+        drop-shadow(0 0 10px rgba(176,82,196,.45))
+        drop-shadow(0 0 22px rgba(176,82,196,.35))
+        drop-shadow(0 0 30px rgba(52, 2, 52, 0.2));
+      opacity: 0.9;
+    }
+    50%{
+      filter:
+        drop-shadow(0 0 22px rgba(176,82,196,.7))
+        drop-shadow(0 0 36px rgba(255,190,255,.55))
+        drop-shadow(0 0 48px rgba(255,220,255,.4));
+      opacity: 1;
+    }
+  }
+
+  .tal-title-left{ left: clamp(-60px, -5vw, -40px);  top: clamp(-6px, -0.5vw, -4px); }
+  .tal-sub-right{  right: clamp(-60px, -5vw, -40px); bottom: clamp(-24px, -2.5vw, -16px); }
+
+  @keyframes drift{
+    0%,100%{ transform:translate(var(--tx,0),var(--ty,-6px)) rotate(0deg); opacity:.92; }
+    50%    { transform:translate(var(--tx,0),var(--ty,6px)) rotate(6deg);  opacity:1; }
+  }
+  @keyframes shimmer{
+    0%,100%{ filter: drop-shadow(0 0 8px rgba(160,124,255,.35)) drop-shadow(0 0 16px rgba(110,168,255,.25)); }
+    50%    { filter: drop-shadow(0 0 12px rgba(160,124,255,.50)) drop-shadow(0 0 24px rgba(110,168,255,.34)); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .title::before,.subtitle::before,.title::after,.subtitle::after,
+    .talisman,.star-under{ animation:none }
+  }
+
+  @media (max-width:900px){
+    
+    .meta{ justify-content:center; margin:4px 0 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="close" id="btnClose">
+    <span class="x">×</span> <span>Close</span>
+  </button>
+    <img src="img/logo.png" alt="logo" class="hkdi">
+</header>
+
+<main class="shell">
+  <!-- Solo lado de contenido, sin aside izquierdo -->
+  <section class="right" id="slideContent"><!-- dinámico --></section>
+</main>
+
+<script>
+  // Slides
+  const slides = [
+    {
+      
+      title: "INSTINTO BOTÁNICO",
+      subtitle: "FOTOGRAFÍA",
+      text: `
+        <p>En “Instinto Botánico”, cada flor, hoja y textura se convierte en protagonista: formas delicadas, colores sutiles y estructuras que normalmente pasan desapercibidas.
+        <br><br>  Esta colección invita a detenerse, a mirar de cerca, a descubrir cómo lo pequeño revela belleza cuando la atención es profunda.
+        Es una exploración íntima de la vida natural, capturada desde la sensibilidad y precisión del ojo curioso.</p>
+        
+        <img src="img/FT/B1.jpg" alt="imagen">
+        <img src="img/FT/B2.jpg" alt="imagen">
+        <img src="img/FT/B3.jpg" alt="imagen">
+      `
+    },
+    {
+      
+      title: "TERRITORIOS ABIERTOS",
+      subtitle: "FOTOGRAFÍA",
+      text: `
+        <p>“Territorios Abiertos” reúne paisajes que respiran amplitud: caminos que invitan a avanzar, elevaciones que enmarcan el cielo y una catedral que emerge como punto de enfoque entre la inmensidad. <br><br>
+           Cada imagen captura la quietud y el asombro del entorno, ofreciendo espacios donde la mirada se expande y encuentra calma.
+        Es una invitación a recorrer el mundo a través de la vista, con la serenidad del paisaje como guía.</p>
+
+        <img src="img/FT/C1.jpg" alt="imagen">
+        <img src="img/FT/C2.jpg" alt="imagen">
+        <img src="img/FT/C3.jpg" alt="imagen">
+        <img src="img/FT/C4.jpg" alt="imagen">
+      `
+    },
+    {
+     
+      title: "CREPÚSCULO",
+      subtitle: "FOTOGRAFÍA",
+      text: `
+        <p>“Crepúsculo” recoge atardeceres en la playa, olas que alcanzan la orilla y tonos cálidos que envuelven el ambiente.
+          <br><br> Hay un momento del día en que todo se suaviza: la luz se vuelve dorada, el mar refleja emociones, y el cielo se enciende sin prisa.
+Esta colección captura esa transición etérea entre el día y la noche, cuando el mundo respira distinto.<br><br></p>
+       
+        <img src="img/FT/P1.jpg" alt="imagen">
+        <img src="img/FT/P2.jpg" alt="imagen">
+      `
+    },
+    {
+      
+      title: "MIRADAS SALVAJES",
+      subtitle: "FOTOGRAFÍA",
+      text: `
+        <p>“Miradas Salvajes” busca capturar la esencia de cada ser: su curiosidad, su serenidad, su fuerza.
+Aquí, cada fotografía es un retrato vivo que conecta la mirada humana con la mirada animal, encontrando un punto común entre ambas.<br><br>
+Los animales también cuentan historias, no con palabras, sino con expresiones y gestos que revelan su carácter.
+Desde mascotas que comparten el día a día hasta criaturas exóticas que habitan otros mundos, esta colección es un encuentro directo con la autenticidad.</p>
+        
+        <img src="img/FT/A1.jpg" alt="imagen">
+        <img src="img/FT/A2.jpg" alt="imagen">
+        <img src="img/FT/A3.jpg" alt="imagen">
+      `
+    },
+    {
+      
+      title: "CUERPOS EN ESCENA",
+      subtitle: "FOTOGRAFÍA",
+      text: `
+        <p>“Cuerpos en Escena” reúne diferentes trabajos donde el rostro deja de ser el protagonista y la narrativa surge desde la postura, el movimiento y la relación con el espacio.
+        Desde expresiones íntimas y personales hasta la intensidad de un concierto, esta colección muestra la versatilidad del retrato en distintas atmósferas.
+        <br><br>Desde sesiones fotográficas estilizadas hasta momentos capturados en un concierto, esta colección explora la estética del cuerpo como figura dinámica.
+        Aquí, la cámara no busca emociones explícitas, sino atmósferas: luces que envuelven, sombras que construyen formas y escenarios que invitan a mirar más allá del gesto.</p>
+        
+        <img src="img/FT/R1.jpg" alt="imagen">
+        <img src="img/FT/R2.jpg" alt="imagen">
+        <img src="img/FT/R3.jpg" alt="imagen">
+        <img src="img/FT/R4.jpg" alt="imagen">
+        <img src="img/FT/R5.jpg" alt="imagen">
+        <img src="img/FT/R6.jpg" alt="imagen">
+      `
+    },
+    
+  ];
+
+  let current = 0;
+  const content = document.getElementById('slideContent');
+
+  function renderSlide(index){
+    const s = slides[index];
+
+    content.style.opacity = 0;
+    setTimeout(() => {
+      content.innerHTML = `
+        <div class="title-row">
+          <h1 class="title" tabindex="0">${s.title}</h1>
+
+          <!-- Talismán junto al TÍTULO (arriba-izquierda) -->
+          <svg class="talisman tal-title-left" viewBox="0 0 64 96" aria-hidden="true">
+            <defs>
+              <linearGradient id="gVio-${index}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"  stop-color="#6ea8ff"/>
+                <stop offset="100%" stop-color="#a07cff"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 2 L62 32 L32 62 L2 32 Z" fill="url(#gVio-${index})"/>
+            <path d="M32 14 L50 32 L32 50 L14 32 Z" fill="#c7d3ff"/>
+            <circle cx="32" cy="32" r="3.2" fill="#eef6ff"/>
+            <path d="M32 66 L40 74 L32 82 L24 74 Z" fill="#89b6ff"/>
+          </svg>
+        </div>
+
+        <div class="subtitle-row">
+          <h2 class="subtitle" tabindex="0">${s.subtitle}</h2>
+
+          <!-- Talismán junto al SUBTÍTULO (abajo-derecha) -->
+          <svg class="talisman tal-sub-right" viewBox="0 0 64 96" aria-hidden="true">
+            <defs>
+              <linearGradient id="gVio2-${index}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"  stop-color="#89b6ff"/>
+                <stop offset="100%" stop-color="#b79bff"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 2 L62 32 L32 62 L2 32 Z" fill="url(#gVio2-${index})"/>
+            <path d="M32 14 L50 32 L32 50 L14 32 Z" fill="#e0e6ff"/>
+            <circle cx="32" cy="32" r="3" fill="#ffffff"/>
+            <path d="M32 66 L38 72 L32 78 L26 72 Z" fill="#9ec4ff"/>
+          </svg>
+
+          <!-- 🌟 Estrella resplandeciente con gradiente -->
+          <svg class="star-under" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <radialGradient id="starGlow" cx="50%" cy="50%" r="60%">
+                <stop offset="0%" stop-color="#d9a8ff" stop-opacity="1"/>
+                <stop offset="50%" stop-color="#b052c4" stop-opacity="1"/>
+                <stop offset="100%" stop-color="#5c1a74" stop-opacity="0.3"/>
+              </radialGradient>
+            </defs>
+            <path d="M32 6 L36 24 L58 28 L36 32 L32 50 L28 32 L6 28 L28 24 Z" fill="url(#starGlow)"/>
+          </svg>
+        </div>
+
+        <div class="meta"><b>${(index+1).toString().padStart(2,'0')}</b>/${slides.length}</div>
+        <article class="content">
+          ${s.text}
+          <div class="bottom">
+            <span class="navlink" id="prevBtn">← Previous</span>
+            <span class="navlink" id="nextBtn">Next →</span>
+          </div>
+        </article>
+      `;
+      content.style.opacity = 1;
+
+      document.getElementById('prevBtn').onclick = () => changeSlide(-1);
+      document.getElementById('nextBtn').onclick = () => changeSlide(1);
+    }, 200);
+  }
+
+  function changeSlide(dir){
+    current = (current + dir + slides.length) % slides.length;
+    renderSlide(current);
+  }
+
+  renderSlide(current);
+
+  // Cerrar → volver a index o atrás
+ document.getElementById('btnClose').addEventListener('click', () => {
+  sessionStorage.setItem('fromProject', '1');
+  window.location.href = 'index.html'; // ajusta ruta si están en carpeta
+});
+
+</script>
+</body>
+</html>
+
+
